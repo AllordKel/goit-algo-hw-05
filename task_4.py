@@ -2,49 +2,21 @@ from pathlib import Path
 from normalize_phone_3 import normalize_phone
 
 
-def add_input_error(func):
+def input_error(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except ValueError:
-            return "Give me name and phone please."
-
-    return inner
-
-
-def change_input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name and phone please."
-
-    return inner
-
-
-def parse_input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "", ""
-
-    return inner
-
-
-def phone_input_error(func):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
+            return "Enter the argument for the command"
         except IndexError:
-            return "Give me a name please."
+            return "Enter a name please."
         except KeyError:
             return "Contact not found"
-        
+
     return inner
 
 
-@parse_input_error
+@input_error
 def parse_input(user_input):
     """Normalize input into command and positional arguments."""
     cmd, *args = user_input.split()
@@ -81,7 +53,7 @@ def save_file(contacts, path="contacts.txt"):
             phone_directory.write(f"{name}:{phone}\n")
 
 
-@add_input_error
+@input_error
 def add_contact(args):
     contacts = load_file()
     name, phone = args
@@ -92,7 +64,7 @@ def add_contact(args):
     return "Contact added."
 
 
-@change_input_error
+@input_error
 def change_contact(args):
     contacts = load_file()
     name, phone = args
@@ -115,7 +87,7 @@ def show_all():
     return "\n".join(output)
 
 
-@phone_input_error
+@input_error
 def show_phone(args):
     """Retrieve the phone number for a specific contact."""
     contacts = load_file()
